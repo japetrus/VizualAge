@@ -1630,7 +1630,16 @@ Function VADownHoleCurveFit(Ratio, [OptionalWindowNumber])
 		//NOTE the next line smooths all waves generated at this point. The aim of this is ONLY to remove outliers. averaging should take care of normal data noise. It seems to be currently screening large spikes well, may need to be reduced if it turns out it's not catching all spikes)
 		//next smooth the wave to replace outlier values with NaN. Note this only replaces positive spikes!
 		//Note that "abs()" is used to avoid rare cases containing negative ratios (low counts for an isotope, where some datapoints are 0, combined with a baseline spline above zero produces negative baseline-corrected values)
-		Smooth/M=(abs(FitOutlierTolerance*(ThisWave[p]+ThisWave[p+1]+ThisWave[p-1])/3))/R=(NaN) 9, ThisWave //aiming at only removing spikes. set here at 1.5 times the average value for this portion of the wave (9 point range centered on this point)
+		//Smooth/M=(abs(FitOutlierTolerance*(ThisWave[p]+ThisWave[p+1]+ThisWave[p-1])/3))/R=(NaN) 9, ThisWave //aiming at only removing spikes. set here at 1.5 times the average value for this portion of the wave (9 point range centered on this point)
+		Variable WindowPoints = 3
+		Variable OutlierRatioToMedian = 1.5
+		Duplicate/O ThisWave, $ioliteDFpath("temp","ThisWaveMedian")
+		Wave ThisWaveMedian =  $ioliteDFpath("temp","ThisWaveMedian")
+		
+		Smooth/M=0 WindowPoints, ThisWaveMedian
+		
+		ThisWave = (abs(ThisWave[p]-ThisWaveMedian[p]) >= outlierRatioToMedian*ThisWaveMedian[p]) ? NaN : ThisWave[p]
+		
 		thisinteg+=1 //next integration  
 	while(thisinteg<NoOfIntegs) //until all integrations added
 	//special case of first waves (i.e. integ 0) used to make the window. A loop is then used to append additional integs.
