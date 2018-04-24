@@ -15,8 +15,6 @@ This is the new home of VizualAge, a U-Pb geochronology data reduction scheme an
 
 # Known problems
 
-1. Isn't happy with Igor Pro 7. Hoping to fix soon.
-
 # Reference
 
 Petrus, J. A., & Kamber, B. S. (2012). VizualAge: A novel approach to laser ablation ICP‐MS U‐Pb geochronology data reduction. Geostandards and Geoanalytical Research, 36(3), 247-270.
